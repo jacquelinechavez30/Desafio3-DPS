@@ -26,6 +26,16 @@ export default function Graficas() {
       console.log(error);
     }
   };
+  const guardarTotalesStorage = async (totalIngresos, totalEgresos) => {
+    try {
+      await AsyncStorage.setItem('totalIngresos', JSON.stringify(totalIngresos));
+      await AsyncStorage.setItem('totalEgresos', JSON.stringify(totalEgresos));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+ 
 
   useEffect(() => {
     cargarDatosStorage();
@@ -33,6 +43,15 @@ export default function Graficas() {
 
   console.log('Ingresos en Graficas:', ingresos);
   console.log('Egresos en Graficas:', egresos);
+
+
+  useEffect(() => {
+    // Calcular totales y guardarlos en AsyncStorage
+    const totalIngresos = ingresos.reduce((sum, ingreso) => sum + parseFloat(ingreso.monto), 0);
+    const totalEgresos = egresos.reduce((sum, egreso) => sum + parseFloat(egreso.monto), 0);
+    
+    guardarTotalesStorage(totalIngresos, totalEgresos);
+  }, [ingresos, egresos]);
 
   // Procesar los ingresos y egresos para generar los datos del gráfico
   const totalIngresos = ingresos.reduce((sum, ingreso) => sum + parseFloat(ingreso.monto), 0);

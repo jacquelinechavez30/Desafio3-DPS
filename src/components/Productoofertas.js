@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, Button, FlatList, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, Button, FlatList, StyleSheet,TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -91,24 +91,28 @@ export default function Productoofertas() {
                     <View style={styles.tarjetasContainer}>
                         <Text>Tarjeta de Crédito Clásica</Text>
                         <Tarjeta tipo="Clasica" />
+                        <Button title="Seleccionar" onPress={() => seleccionarProducto("Tarjeta de Crédito Clásica")} />
                     </View>
                 )}
                 {Oro && (
                     <View style={styles.tarjetasContainer}>
                         <Text>Tarjeta de Crédito Oro.</Text>
                         <Tarjeta tipo='Oro' />
+                        <Button title="Seleccionar" onPress={() => seleccionarProducto("Tarjeta de Crédito Oro")} />
                     </View>
                 )}
                 {Platinum && (
                     <View style={styles.tarjetasContainer}>
                         <Text>Tarjeta de Crédito Platinum.</Text>
                         <Tarjeta tipo='Platinum' />
+                        <Button title="Seleccionar" onPress={() => seleccionarProducto("Tarjeta de Crédito Platinum")} />
                     </View>
                 )}
                 {Black && (
                     <View style={styles.tarjetasContainer}>
                         <Text>Tarjeta de Crédito Black.</Text>
                         <Tarjeta tipo='Black' />
+                        <Button title="Seleccionar" onPress={() => seleccionarProducto("Tarjeta de Crédito Black.")} />
                     </View>
                 )}
             </View>
@@ -121,6 +125,25 @@ export default function Productoofertas() {
 
     console.log('Ofertas Filtradas:', ofertasFiltradass);
 
+//Examen 3
+const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+const seleccionarProducto = (producto) => {
+    if (!productosSeleccionados.includes(producto)) {
+        setProductosSeleccionados((prev) => [...prev, producto]);
+    }
+};
+
+const guardarProductosSeleccionados = async () => {
+    try {
+        await AsyncStorage.setItem('productosSeleccionados', JSON.stringify(productosSeleccionados));
+        navigation.navigate('Compras'); // Navegar al componente Compras
+    } catch (error) {
+        console.error('Error guardando productos seleccionados:', error);
+    }
+};
+
+//fin
+
     return (
         <View style={styles.mainContainer}>
             <Text style={styles.title}>¡Aprovecha estas ofertas!</Text>
@@ -130,6 +153,7 @@ export default function Productoofertas() {
                 renderItem={({ item }) => (
                     <View>
                         <Text style={styles.offerContainer}>{item}</Text>
+                        <Button title="Seleccionar" onPress={() => seleccionarProducto(item)} />
                     </View>
                 )}
             />
@@ -139,6 +163,7 @@ export default function Productoofertas() {
                 title="Volver a inicio"
                 onPress={() => navigation.navigate('Stackdatos')}
             />
+             <Button title="Finalizar Selección" onPress={guardarProductosSeleccionados} />
         </View>
     );
 }
