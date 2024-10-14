@@ -3,6 +3,7 @@ import React from 'react'
 import { useNavigation } from "@react-navigation/native";
 
 
+
 export default function Home() {
   const navigation = useNavigation();
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <TouchableOpacity onPress={() => navigation.navigate('FormularioIngreso')}>
          <Text style={{color: '#dc3545', marginBottom: 8, }}>Ir a formularios</Text>
        </TouchableOpacity>
+      
     </View>
   )
 }

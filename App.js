@@ -9,6 +9,7 @@ import Productoofertas from './src/components/Productoofertas';
 import Misproductos from './src/components/Misproductos';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -50,20 +51,22 @@ export default function App() {
         component={Stackdatos} 
         options={{ 
           title: 'Datos del Cliente',
-          tabBarIcon: ({ color, size }) => (<Icon name="archive" color={color} size={size}/>) }} />
+          tabBarIcon: ({ color, size }) => (<Icon name="archive" color={color} size={size}/>), headerShown: false }} />
         
         <Tab.Screen 
         name="Productoofertas" 
         component={Productoofertas} 
         options={{ 
           title: 'Productos y Ofertas',
-          tabBarIcon: ({ color, size, }) => (<Icon name="gift" color={color} size={size} />) }} />
+          tabBarIcon: ({ color, size, }) => (<Icon name="gift" color={color} size={size} />), headerShown: false }} />
           <Tab.Screen 
         name="Misproductos" 
         component={Misproductos} 
         options={{ 
           title: 'Mis productos',
-          tabBarIcon: ({ color, size, }) => (<Icon name="gift" color={color} size={size} />) }} />
+          tabBarIcon: ({ color, size, }) => (<Icon name="gift" color={color} size={size} />) , headerShown: false }} />
+       
+
 
       </Tab.Navigator>
 
