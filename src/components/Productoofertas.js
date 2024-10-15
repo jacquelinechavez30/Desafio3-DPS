@@ -136,7 +136,7 @@ const seleccionarProducto = (producto) => {
 const guardarProductosSeleccionados = async () => {
     try {
         await AsyncStorage.setItem('productosSeleccionados', JSON.stringify(productosSeleccionados));
-        navigation.navigate('Compras'); // Navegar al componente Compras
+        navigation.navigate('Datos'); 
     } catch (error) {
         console.error('Error guardando productos seleccionados:', error);
     }
@@ -159,10 +159,7 @@ const guardarProductosSeleccionados = async () => {
             />
             <ScrollView style={styles.scrollContainer}><TarjetasCredito /></ScrollView>
 
-            <Button
-                title="Volver a inicio"
-                onPress={() => navigation.navigate('Stackdatos')}
-            />
+         
              <Button title="Finalizar Selección" onPress={guardarProductosSeleccionados} />
         </View>
     );
