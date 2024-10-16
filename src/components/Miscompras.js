@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         backgroundColor: '#fff',
-        flexDirection: 'row',
+        flexDirection: 'column',
        
     },
     title: {

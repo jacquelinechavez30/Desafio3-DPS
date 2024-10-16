@@ -20,17 +20,17 @@ export default function Stackdatos() {
         <Stack.Screen
           name="FormularioIngreso"
           component={Ingresos} // Usa el componente Ingresos
-          options={{ title: 'Ingresos' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
         name="FormularioEgresos"
         component={Egresos} // Usa el componente Egresos
-        options={{ title: 'Egresos' }}
+        options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Graficas"
           component={Graficas} // Usa el componente Grafica
-          options={{ title: 'Gráficas' }}
+          options={{ headerShown: false }}
         />
          <Stack.Screen
           name="Home"
@@ -40,17 +40,17 @@ export default function Stackdatos() {
         <Stack.Screen
         name="Productoofertas"
         component={Productoofertas} // Usa el componente Productoofertas
-        options={{ title: 'Productos en Oferta' }}
+        options={{ headerShown: false }}
         />
         <Stack.Screen
         name="Miscompras"
         component={Miscompras} // Usa el componente  Miscompras
-        options={{ title: 'Mis Compras' }}
+        options={{ headerShown: false }}
         />
         <Stack.Screen
         name="Compras"
         component={Compra} // Usa el componente Compra
-        options={{ title: 'Compras' }}
+        options={{ headerShown: false }}
         />
         <Stack.Screen
         name="Datos"
