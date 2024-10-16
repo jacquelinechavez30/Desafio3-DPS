@@ -7,6 +7,7 @@ import Stackdatos from './src/components/Stackdatos';
 import Home from './src/components/Home';
 import Productoofertas from './src/components/Productoofertas';
 import Misproductos from './src/components/Misproductos';
+import Miscompras from './src/components/Miscompras';
 import Mapa from './src/components/Mapa';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -56,7 +57,7 @@ export default function App() {
           tabBarIcon: ({ color, size }) => (<Icon name="person" color={color} size={size}/>), headerShown: false }} />
           <Tab.Screen 
         name="Misproductos" 
-        component={Misproductos} 
+        component={Miscompras} 
         options={{ 
           title: 'Mis productos',
           /*icono de  bolsa*/
