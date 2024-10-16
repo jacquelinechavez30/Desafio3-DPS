@@ -8,7 +8,6 @@ import Home from './src/components/Home';
 import Productoofertas from './src/components/Productoofertas';
 import Misproductos from './src/components/Misproductos';
 import Miscompras from './src/components/Miscompras';
-import Mapa from './src/components/Mapa';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -37,7 +36,7 @@ export default function App() {
 
       <StatusBar
         barStyle="dark-content" 
-        backgroundColor="#0d6efd" 
+        backgroundColor="#002d70" 
       />
 
     <NavigationContainer>
@@ -62,12 +61,6 @@ export default function App() {
           title: 'Mis productos',
           /*icono de  bolsa*/
           tabBarIcon: ({ color, size, }) => (<Icon name="bag" color={color} size={size} />) , headerShown: false }} />
-       <Tab.Screen 
-        name="Mapa" 
-        component={Mapa} 
-        options={{ 
-          title: 'Mapa',
-          tabBarIcon: ({ color, size, }) => (<Icon name="map" color={color} size={size} />), headerShown: false }} />
      {/* <Tab.Screen 
         name="Productoofertas" 
         component={Productoofertas} 

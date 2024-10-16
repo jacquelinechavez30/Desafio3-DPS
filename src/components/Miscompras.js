@@ -4,11 +4,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Url from './Url';
 import Icon from 'react-native-vector-icons/FontAwesome/';
+import { useNavigation } from '@react-navigation/native';
+import Mapa from './Mapa';
 
 export default function Miscompras() {
     const [productos, setProductos] = useState([]);
     const [nombreCompleto, setNombreCompleto] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigator = useNavigation();
+
     const url_get = Url + '/productos';
     const url_delete = Url + '/eliminarproducto/';
 
@@ -80,6 +84,15 @@ export default function Miscompras() {
                                 >
                                     <Text style={styles.deleteButtonText}>Eliminar</Text>
                                 </TouchableOpacity>
+                                {item.estado === 'aprobado' ? (
+                                    <TouchableOpacity 
+                                    style={styles.botonToMapa}
+                                    onPress={navigator.navigate(Mapa)}>
+                                        <Text style={styles.textToMapa}>Ver ubicaciones de entrega</Text>
+                                    </TouchableOpacity>
+                                ) : (
+                                    null
+                                )}
                             </View>
                         ))
                     ) : (
@@ -133,5 +146,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 20,
         color: 'gray',
+    },
+    botonToMapa: {
+        backgroundColor: '#002d70',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    textToMapa: {
+        color: '#fff',
+        fontSize: 16,
     },
 });

@@ -9,6 +9,7 @@ import Home from './Home';
 import Compra from './Compras';
 import Miscompras from './Miscompras';
 import  Datos from './Datos';
+import Mapa from './Mapa';
 import Productoofertas from './Productoofertas';
 
 const Stack = createStackNavigator();
@@ -55,6 +56,11 @@ export default function Stackdatos() {
         <Stack.Screen
         name="Datos"
         component={Datos} // Usa el componente Datos
+        options={{ headerShown: false }}
+        />
+        <Stack.Screen
+        name="Mapa"
+        component={Mapa}
         options={{ headerShown: false }}
         />
         
