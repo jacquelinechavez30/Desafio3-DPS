@@ -6,7 +6,8 @@ import Ingresos from './Ingresos'; // Importa el archivo Ingresos.js
 import Egresos from './Egresos';
 import Graficas from './Graficas'
 import Home from './Home';
-import Compras from './Compras';
+import Compra from './Compras';
+import Miscompras from './Miscompras';
 import  Datos from './Datos';
 
 
@@ -15,7 +16,7 @@ const Stack = createStackNavigator();
 export default function Stackdatos() {
   return (
 
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Datos">
         <Stack.Screen
           name="FormularioIngreso"
           component={Ingresos} // Usa el componente Ingresos
@@ -37,8 +38,13 @@ export default function Stackdatos() {
           options={{ title: 'Inicio' }}
         />
         <Stack.Screen
+        name="Miscompras"
+        component={Miscompras} // Usa el componente  Miscompras
+        options={{ title: 'Mis Compras' }}
+        />
+        <Stack.Screen
         name="Compras"
-        component={Compras} // Usa el componente Compras
+        component={Compra} // Usa el componente Compra
         options={{ title: 'Compras' }}
         />
         <Stack.Screen

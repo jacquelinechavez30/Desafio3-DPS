@@ -136,7 +136,7 @@ const seleccionarProducto = (producto) => {
 const guardarProductosSeleccionados = async () => {
     try {
         await AsyncStorage.setItem('productosSeleccionados', JSON.stringify(productosSeleccionados));
-        navigation.navigate('Datos'); 
+        navigation.navigate('Compras'); 
     } catch (error) {
         console.error('Error guardando productos seleccionados:', error);
     }

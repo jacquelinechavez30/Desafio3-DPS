@@ -1,23 +1,22 @@
+import axios from 'axios';
 import React,  { useState, useRef } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';  
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import Icon from 'react-native-vector-icons/FontAwesome/';
+import Url from './Url';
 
 
 export default function Datos()  {
-    const navigation = useNavigation(); // Usar el hook de navegación
-
-    const handleSubmit = (values) => {
-        console.log('Formulario enviado:', values);
-        Alert.alert('Compra finalizada', 'Gracias por su compra');
-        onClose(); // Cerrar el modal o el componente
-    };
+    const navigation = useNavigation(); 
+    const [loading, setLoading] = useState(false);
+//url post
+const url_post = Url + '/crearPersona';
 
     const validationSchema = Yup.object().shape({
-        nombreProducto: Yup.string().required('El nombre del producto es obligatorio'),
         nombreCompleto: Yup.string().required('El nombre completo es obligatorio'),
         direccion: Yup.string().required('La dirección es obligatoria'),
         telefono: Yup.string()
@@ -30,7 +29,8 @@ export default function Datos()  {
   const [isCameraVisible, setIsCameraVisible] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   //para guardar la foto 
-  const [photo, setPhoto] = useState(null);
+  const [photoCarnet, setPhotoCartnet] = useState('carnet');
+  const [photoSelfie, setPhotoSelfie] = useState('selfie');
   const cameraRef = useRef(null);
   if (!permission) {
     return <View />;
@@ -40,7 +40,7 @@ export default function Datos()  {
     return (
       <View style={styles.container}>
         <Text style={styles.heading}>Necesita permiso para ver la camara</Text>
-        <Button style={styles.buttonText} onPress={requestPermission} title="Grant permission" />
+        <Button style={styles.buttonText} onPress={requestPermission} title="Permiso para la camara" />
       </View>
     );
   }
@@ -53,16 +53,43 @@ export default function Datos()  {
 
   function handleCloseCamera() {
     setIsCameraVisible(false);
-    setPhoto(null);
   }
 //Para tomar la foto
-function takePicture() {
+function takePicture() {}
 
-        const photo = takePictureAsync({ base64: true });
-        setPhoto(photo.uri); 
-        Alert.alert('Foto tomada', 'La foto ha sido tomada exitosamente') 
+  async function handleSubmit(values) {
+    setLoading(true);
+    //conectando ala api 
+    try {
+     
+      await AsyncStorage.setItem('nombreCompleto', values.nombreCompleto);
+      console.log("Valores a enviar:", {
+        nombreCompleto: values.nombreCompleto,
+        direccion: values.direccion,
+        telefono: values.telefono,
+        fotoCarnet: photoCarnet, 
+        fotoSelfie: photoSelfie, 
+        idNotificacionPush: 'luna',
+    });
+      const response = await axios.post(url_post, {
+        nombreCompleto: values.nombreCompleto,
+      direccion: values.direccion,
+      telefono: values.telefono,
+      fotoCarnet: photoCarnet, 
+      fotoSelfie: photoSelfie, 
+      idNotificacionPush: 'luna',
+
+      });
+      navigation.navigate('FormularioIngreso');
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message || 'Problemas al realizar el registro intenta mas tarde';
+  Alert.alert('¡ERROR!', errorMessage);
+  console.error(error);
+    }
+    finally {
+      setLoading(false); // Finalizar carga
+  }
 }
-
 
     return (
         <View style={styles.modalContainer}>
@@ -84,11 +111,16 @@ function takePicture() {
         </CameraView>
       ) : (
 
-
         <View>
+        
+                        {loading ? ( 
+                            <View style={styles.loadingContainer}>
+                                <ActivityIndicator size="large" color="#2196F3" />
+                                <Text style={styles.loadingText}>Cargando...</Text>
+                            </View>
+                        ) : (
              <Formik
                 initialValues={{
-                    nombreProducto: '',
                     nombreCompleto: '',
                     direccion: '',
                     telefono: '',
@@ -98,17 +130,6 @@ function takePicture() {
             >
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                     <>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nombre del producto"
-                            onChangeText={handleChange('nombreProducto')}
-                            onBlur={handleBlur('nombreProducto')}
-                            value={values.nombreProducto}
-                        />
-                        {errors.nombreProducto && touched.nombreProducto && (
-                            <Text style={styles.errorText}>{errors.nombreProducto}</Text>
-                        )}
-
                         <TextInput
                             style={styles.input}
                             placeholder="Nombre completo"
@@ -163,14 +184,15 @@ function takePicture() {
                     </>
                 )}
             </Formik>
+               )}
         </View> 
       )}
     </View>
 
         </View>
     );
-};
 
+  }
 const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
@@ -242,7 +264,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
       },
+    loadingContainer: {
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    loadingText: {
+        marginLeft: 10,
+        fontSize: 16,
+    },
     });
-    
+  
 
 
