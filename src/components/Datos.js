@@ -92,8 +92,7 @@ function takePicture() {}
 }
 
     return (
-        <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Finalizar Compra</Text>
+        <View  style={styles.Container}>
             <View style={styles.containerC}>
       {isCameraVisible ? (
         <CameraView style={styles.cameraC} facing={facing}>
@@ -119,6 +118,13 @@ function takePicture() {}
                                 <Text style={styles.loadingText}>Cargando...</Text>
                             </View>
                         ) : (
+                          <View ><Text style={styles.Title}>Datos.
+                          {/*icono person */}
+                          <Icon name="user-circle" size={30} color="#2196" 
+                          marginLeft={20}
+                          
+                          />
+                          </Text>
              <Formik
                 initialValues={{
                     nombreCompleto: '',
@@ -184,7 +190,9 @@ function takePicture() {}
                     </>
                 )}
             </Formik>
+            </View>
                )}
+               
         </View> 
       )}
     </View>
@@ -194,15 +202,18 @@ function takePicture() {}
 
   }
 const styles = StyleSheet.create({
-    modalContainer: {
+    Container: {
         flex: 1,
-        padding: 20,
+         padding: 20,
         justifyContent: 'center',
     },
-    modalTitle: {
-        fontSize: 22,
+    Title: {
+        fontSize: 30,
         fontWeight: 'bold',
         marginBottom: 20,
+        textAlign: 'center',
+       
+      
     },
     input: {
         borderWidth: 1,
@@ -214,8 +225,9 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#2196F3',
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 10,
         marginBottom: 10,
+        
     },
     buttonText: {
         color: 'white',

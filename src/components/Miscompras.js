@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert, ActivityIn
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Url from './Url';
+import Icon from 'react-native-vector-icons/FontAwesome/';
 
 export default function Miscompras() {
     const [productos, setProductos] = useState([]);
@@ -60,7 +61,10 @@ export default function Miscompras() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Mis Compras</Text>
+            <Text style={styles.title}>Mis Compras 
+               { /*Icono de compra*/}
+                <Icon name="shopping-cart" size={30} color="black" />
+            </Text>
             {loading ? (
                 <ActivityIndicator size="large" color="#2196F3" />
             ) : (
@@ -99,9 +103,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
+        marginLeft: 20,
     },
     productContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 1,
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
         color: '#888',
     },
     deleteButton: {
-        backgroundColor: '#FF6347',
+        backgroundColor: 'red',
         padding: 5,
         borderRadius: 5,
     },

@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity,  Alert, Act
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/FontAwesome/';
 import Url from './Url';
 
 export default function Compras() {
@@ -61,7 +62,7 @@ export default function Compras() {
           });
           await Promise.all(promises);
           Alert.alert('¡Éxito!', 'La compra se ha realizado exitosamente.');
-          navigation.navigate('Misproductos');
+          navigation.navigate('Miscompras');
         } catch (error) {
           const errorMessage = error?.response?.data?.message || 'Problemas al realizar la compra intenta mas tarde';
       Alert.alert('¡ERROR!', errorMessage);

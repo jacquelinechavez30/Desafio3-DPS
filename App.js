@@ -53,21 +53,20 @@ export default function App() {
         component={Stackdatos} 
         options={{ 
           title: 'Datos del Cliente',
-          tabBarIcon: ({ color, size }) => (<Icon name="archive" color={color} size={size}/>), headerShown: false }} />
-        
-        
+          tabBarIcon: ({ color, size }) => (<Icon name="person" color={color} size={size}/>), headerShown: false }} />
           <Tab.Screen 
         name="Misproductos" 
         component={Misproductos} 
         options={{ 
           title: 'Mis productos',
-          tabBarIcon: ({ color, size, }) => (<Icon name="gift" color={color} size={size} />) , headerShown: false }} />
+          /*icono de  bolsa*/
+          tabBarIcon: ({ color, size, }) => (<Icon name="bag" color={color} size={size} />) , headerShown: false }} />
        <Tab.Screen 
         name="Mapa" 
         component={Mapa} 
         options={{ 
           title: 'Mapa',
-          tabBarIcon: ({ color, size, }) => (<Icon name="gift" color={color} size={size} />), headerShown: false }} />
+          tabBarIcon: ({ color, size, }) => (<Icon name="map" color={color} size={size} />), headerShown: false }} />
      {/* <Tab.Screen 
         name="Productoofertas" 
         component={Productoofertas} 

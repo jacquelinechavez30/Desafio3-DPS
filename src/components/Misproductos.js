@@ -3,6 +3,8 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ActivityIndi
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Url from './Url';
+import Icon from 'react-native-vector-icons/FontAwesome/';
+
 
 export default function Misproductos() {
     const [productos, setProductos] = useState([]);
@@ -76,7 +78,8 @@ export default function Misproductos() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Mis Compras</Text>
+            <Text style={styles.title}>Mis Productos  { /*Icono de compra*/}
+            <Icon name="shopping-cart" size={30} color="black" /></Text>
             {loading ? (
                 <ActivityIndicator size="large" color="#2196F3" />
             ) : (
@@ -129,19 +132,23 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         backgroundColor: '#fff',
+        flexDirection: 'column',
+        marginBottom: 20,
+
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
+        marginLeft: 20,
     },
     productContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
-        paddingVertical: 10,
+        paddingVertical: 20,
     },
     productName: {
         fontSize: 16,
@@ -151,7 +158,7 @@ const styles = StyleSheet.create({
         color: '#888',
     },
     deleteButton: {
-        backgroundColor: '#FF6347',
+        backgroundColor: 'red',
         padding: 5,
         borderRadius: 5,
     },
