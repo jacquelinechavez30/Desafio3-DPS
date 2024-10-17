@@ -9,7 +9,7 @@ export default Header = () => {
         source={logo} 
         style={styles.image}
       />
-      <Text style={styles.title}>CreditMate_Cliente</Text>
+      <Text style={styles.title}> CreditMate_Cliente</Text>
     </View>
   );
 };
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    marginTop: 20,
+    marginTop: 1,
     backgroundColor: '#fff', 
     elevation: 3,
     shadowOffset: { width: 0, height: 2 },

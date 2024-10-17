@@ -63,6 +63,41 @@ export default function Miscompras() {
         }
     }, [nombreCompleto]);
 
+
+    const renderProducto = (item) => {
+        let icono = null;
+
+        
+        if (item.nombreProducto.includes('Apertura de cuenta')) {
+            icono = <Icon name="user" size={24} color="blue" />;
+        } else if (item.nombreProducto.includes('Crédito personal hasta')) {
+            icono = <Icon name="money" size={24} color="green" />;
+        } else if (item.nombreProducto.includes('Tarjeta')) {
+            icono = <Icon name="credit-card" size={24} color="orange" />;
+        }
+        return (
+            <View key={item._id} style={styles.productContainer}>
+                <Text style={styles.productName}> Producto: {item.nombreProducto} {icono}</Text>
+                <Text style={styles.productStatus}>Estado: {item.estado}</Text>
+                <TouchableOpacity
+                    onPress={() => eliminarProducto(item._id)}
+                    style={styles.deleteButton}
+                >
+                    <Text style={styles.deleteButtonText}>Eliminar</Text>
+                </TouchableOpacity>
+                {item.estado === 'aprobado' ? (
+                    <TouchableOpacity
+                        style={styles.botonToMapa}
+                        onPress={() => navigator.navigate('Mapa')}
+                    >
+                        <Text style={styles.textToMapa}>Ver ubicaciones de entrega</Text>
+                    </TouchableOpacity>
+                ) : null}
+            </View>
+        );
+    };
+
+    
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Mis Compras
@@ -74,27 +109,7 @@ export default function Miscompras() {
             ) : (
                 <ScrollView>
                     {productos.length > 0 ? (
-                        productos.map((item) => (
-                            <View key={item._id} style={styles.productContainer}>
-                                <Text style={styles.productName}>Producto: {item.nombreProducto}</Text>
-                                <Text style={styles.productStatus}>Estado: {item.estado}</Text>
-                                <TouchableOpacity
-                                    onPress={() => eliminarProducto(item._id)}
-                                    style={styles.deleteButton}
-                                >
-                                    <Text style={styles.deleteButtonText}>Eliminar</Text>
-                                </TouchableOpacity>
-                                {item.estado === 'aprobado' ? (
-                                    <TouchableOpacity 
-                                    style={styles.botonToMapa}
-                                    onPress={navigator.navigate(Mapa)}>
-                                        <Text style={styles.textToMapa}>Ver ubicaciones de entrega</Text>
-                                    </TouchableOpacity>
-                                ) : (
-                                    null
-                                )}
-                            </View>
-                        ))
+                        productos.map(renderProducto)
                     ) : (
                         <Text style={styles.emptyText}>No tienes productos registrados</Text>
                     )}
@@ -156,6 +171,8 @@ const styles = StyleSheet.create({
     },
     textToMapa: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 12,
+        //negrita
+        fontWeight: 'bold',
     },
 });

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tarjeta from './Tarjeta';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Productoofertas() {
     const navigation = useNavigation();
@@ -144,24 +145,47 @@ const guardarProductosSeleccionados = async () => {
 
 //fin
 
+const renderOferta = ({ item }) => {
+    let icono = null;
+
+    
+    if (item.includes('Apertura de cuenta')) {
+        icono = <Icon name="user" size={50} color="blue" />;
+    } else if (item.includes('Crédito personal')) {
+        icono = <Icon name="money" size={50} color="green" />;
+    }
+
     return (
+        <View style={styles.offerContainer}>
+            {/* Muestra el ícono */}
+            <Text style={styles.textlista}> {icono} {item}</Text>
+
+                <TouchableOpacity onPress={() => seleccionarProducto(item)}>
+                    <Text style={styles.textseleccionar}>Seleccionar</Text>
+                </TouchableOpacity>
+        </View>
+    );
+};
+
+    return (
+       
         <View style={styles.mainContainer}>
             <Text style={styles.title}>¡Aprovecha estas ofertas!</Text>
             <FlatList
                 data={ofertasFiltradass}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
+                renderItem={renderOferta}
+                ListEmptyComponent={() => 
                     <View>
-                        <Text style={styles.offerContainer}>{item}</Text>
-                        <Button title="Seleccionar" onPress={() => seleccionarProducto(item)} />
-                    </View>
-                )}
+                <Text>No hay ofertas disponibles</Text>
+                </View>}
+                
             />
             <ScrollView style={styles.scrollContainer}><TarjetasCredito /></ScrollView>
-
-         
              <Button title="Finalizar Selección" onPress={guardarProductosSeleccionados} />
         </View>
+       
+
     );
 }
 
@@ -172,7 +196,8 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         width: '100%',
-        padding: 10,
+        padding: 20,
+        marginTop:20,
         alignItems: 'center',
         flex: 1
     },
@@ -195,5 +220,19 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         padding: 5,
         borderRadius: 10,
+    },
+    textseleccionar:{
+        padding: 5,
+        borderRadius: 20,
+        color: 'green',
+        fontWeight: 'bold',
+        textAlign:'center'
+
+    },
+    textlista:{
+        padding: 5,
+        fontWeight: 'bold',
+        textAlign:'center',
+        alignItems:'center'
     }
 });

@@ -35,10 +35,7 @@ export default function App() {
 
       <View style={{ flex: 1 }}>
 
-      <StatusBar
-        barStyle="dark-content" 
-        backgroundColor="#002d70" 
-      />
+     
 
     <NavigationContainer>
 
@@ -53,8 +50,8 @@ export default function App() {
         name="Stackdatos" 
         component={Stackdatos} 
         options={{ 
-          title: 'Datos del Cliente',
-          tabBarIcon: ({ color, size }) => (<Icon name="person" color={color} size={size}/>), headerShown: false }} />
+          title: 'Inicio',
+          tabBarIcon: ({ color, size }) => (<Icon name="home" color={color} size={size}/>), headerShown: false }} />
           <Tab.Screen 
         name="Misproductos" 
         component={Miscompras} 
@@ -62,7 +59,7 @@ export default function App() {
           title: 'Mis productos',
           /*icono de  bolsa*/
           tabBarIcon: ({ color, size, }) => (<Icon name="bag" color={color} size={size} />) , headerShown: false }} />
-     {/* <Tab.Screen 
+      {/*<Tab.Screen 
         name="Productoofertas" 
         component={Productoofertas} 
         options={{ 
