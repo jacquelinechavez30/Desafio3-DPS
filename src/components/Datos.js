@@ -53,11 +53,22 @@ const url_post = Url + '/crearPersona';
 
   if (!permission.granted) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.heading}>Necesita permiso para ver la camara</Text>
-        <Button style={styles.buttonText} onPress={requestPermission} title="Permiso para la camara" />
-      </View>
-    );
+      Alert.alert(
+        'Habilitar cámaras',
+        'Para continuar debe habilitar su cámara, ¿Conceder permiso?',
+        [
+            {text: 'Cancelar', onPress: () => {
+              <View style={styles.container}>
+                <Text style={styles.heading}>Necesitas habilitar la cámara para continuar</Text>
+                <Button style={styles.buttonText} onPress={requestPermission} title="Permiso para camara" />
+              </View>
+            }},
+            {text: 'Aceptar', onPress: () => {
+                requestPermission();
+            }},
+        ],
+        {cancelable: false},
+      ));
   }
   function toggleCameraFacing() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
@@ -133,12 +144,8 @@ function takePicture() {}
                                 <Text style={styles.loadingText}>Cargando...</Text>
                             </View>
                         ) : (
-                          <View ><Text style={styles.Title}>Datos.
-                          {/*icono person */}
-                          <Icon name="user-circle" size={30} color="#2196" 
-                          marginLeft={20}
-                          
-                          />
+                          <View ><Text style={styles.Title}><Icon name="user-circle" size={30} color="#2196" 
+                          marginLeft={20}/> Ingresa tus datos
                           </Text>
              <Formik
                 initialValues={{
@@ -227,8 +234,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-       
-      
     },
     input: {
         borderWidth: 1,
@@ -299,7 +304,9 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontSize: 16,
     },
-    });
-  
-
-
+    container: {
+        flex: 1,
+        padding: 20,
+        justifyContent: 'center',
+    },
+});

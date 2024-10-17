@@ -9,6 +9,7 @@ import Home from './Home';
 import Compra from './Compras';
 import Miscompras from './Miscompras';
 import  Datos from './Datos';
+import Mapa from './Mapa';
 import Productoofertas from './Productoofertas';
 import Notificaciones from './Notificaciones';
 import Header from './Header';
@@ -60,12 +61,19 @@ export default function Stackdatos() {
         options={{ header: () => <Header /> }}
         />
         <Stack.Screen
+<<<<<<< HEAD
         name="Notificaciones"
         component={Notificaciones} // Usa el componente Notificaciones
         options={{ header: () => <Header /> }}
         />
 
 
+=======
+        name="Mapa"
+        component={Mapa}
+        options={{ headerShown: false }}
+        />
+>>>>>>> d0ea5acb55f0fbb3eac10a7f8ac7b7c7ace04376
         
       </Stack.Navigator>
   )
