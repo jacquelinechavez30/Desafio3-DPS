@@ -3,6 +3,7 @@ import { View, Text, Button, ScrollView, Alert, TouchableOpacity, ActivityIndica
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Url from './Url';
+import Icon from 'react-native-vector-icons/FontAwesome/';
 
 export default  ProductosPersona = ({ navigation }) => {
   const [productos, setProductos] = useState([]);
@@ -56,7 +57,7 @@ export default  ProductosPersona = ({ navigation }) => {
     console.log('Aprobando producto con ID:', idProducto); 
     try {
       await axios.put(`${Url}/editarproducto/${idProducto}`, {
-        estado: 'Aprobado',
+        estado: 'aprobado',
         pushToken: idNotificaciones,
       });
       Alert.alert('Producto aprobado', 'El estado del producto ha sido actualizado a "Aprobado".');
@@ -65,7 +66,20 @@ export default  ProductosPersona = ({ navigation }) => {
       console.error('Error al aprobar el producto:', error.response ? error.response.data : error.message);
     }
   };
-  
+  const renderProducto = (item) => {
+    let icono = null;
+
+    
+    if (item.nombreProducto.includes('Apertura de cuenta')) {
+        icono = <Icon name="user" size={24} color="blue" />;
+    } else if (item.nombreProducto.includes('Crédito personal hasta')) {
+        icono = <Icon name="money" size={24} color="green" />;
+    } else if (item.nombreProducto.includes('Tarjeta')) {
+        icono = <Icon name="credit-card" size={24} color="orange" />;
+    }
+    return icono;
+
+  }
   
   return (
     <ScrollView style={styles.container}>
@@ -83,7 +97,10 @@ export default  ProductosPersona = ({ navigation }) => {
           {productos.length > 0 ? (
             productos.map((producto) => (
               <View key={producto._id} style={styles.productContainer}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                {renderProducto(producto)}
                 <Text style={styles.productName}>{producto.nombreProducto}</Text>
+                </View>
                 <Text style={styles.productStatus}>Estado: {producto.estado}</Text>
                 <TouchableOpacity
                                     onPress={() => eliminarProducto(producto._id)}
@@ -123,7 +140,6 @@ const styles = StyleSheet.create({
   },
   productContainer: {
       flexDirection: 'column',
-      //justifyContent: 'space-between',
       alignItems: 'center',
       borderBottomWidth: 1,
       borderBottomColor: '#ddd',
@@ -140,6 +156,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'red',
       padding: 5,
       borderRadius: 5,
+      marginTop: 5,
       
   },
   deleteButtonText: {

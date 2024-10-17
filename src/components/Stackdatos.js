@@ -22,7 +22,6 @@ export default function Stackdatos() {
         component={ProductosPersona} 
         options={{  header: () => <Header />}}
         />
-        
       </Stack.Navigator>
   )
 }

@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator,StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator,StyleSheet,Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Url from './Url';
+import Icon from 'react-native-vector-icons/FontAwesome/';
+
 
 export default Datos = ({ navigation }) => {
   const [personas, setPersonas] = useState([]);
@@ -37,11 +39,36 @@ export default Datos = ({ navigation }) => {
       console.log('Error al guardar nombre en AsyncStorage:', error);
     }
   };
+  const eliminarPersona = async (id) => {
+    Alert.alert(
+      "Eliminar Persona",
+      "¿Estás seguro de que deseas eliminar esta persona?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          onPress: async () => {
+            try {
+              const url_delete = Url + `/eliminarpersona/${id}`;
+              await axios.delete(url_delete);
+              console.log('Persona eliminada correctamente');
+              obtenerPersonas(); // Actualizar la lista de personas
+            } catch (error) {
+              console.log('Error al eliminar persona:', error);
+            }
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
 
   return (
     <ScrollView  style={styles.container}>
 
-      <Text style={styles.title}>Personas Registradas</Text>
+      <Text style={styles.title}>Personas Registradas <Icon name="user" size={24} color="black" /></Text>
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" /> 
@@ -49,18 +76,25 @@ export default Datos = ({ navigation }) => {
         personas.length > 0 ? (
           personas.map((persona) => (
             <View key={persona._id} style={styles.personaContainer}>
-              <Text style={styles.Name}>Nombre:{persona.nombreCompleto}</Text>
-              <Text style={styles.emptyText}>Telefono:{persona.telefono}</Text>
-              <Text style={styles.emptyText}>Dirección:{persona.direccion}</Text>
-              <Text style={styles.emptyText}>Id Notificaciones:{persona. idNotificacionPush}</Text>
+              <Text style={styles.Name}><Icon name="user" size={24} color="black" />Nombre:{persona.nombreCompleto} </Text>
+              <Text style={styles.emptyText}><Icon name="phone" size={24} color="black" />Telefono:{persona.telefono}</Text>
+              <Text style={styles.emptyText}><Icon name="home" size={24} color="black" />Dirección:{persona.direccion}</Text>
+              {/*<Text style={styles.emptyText}>Id Notificaciones:{persona. idNotificacionPush}</Text>*/}
+              
               
               <View style={styles.botonproductos}>
                 <TouchableOpacity
-                                    onPress={() => verProductos(persona)}
-                                    style={styles.verButton}
-                                >
-                                    <Text style={styles.verButtonText}>Ver productos</Text>
-                                </TouchableOpacity></View>
+                onPress={() => verProductos(persona)}
+                 style={styles.verButton}>
+                <Text style={styles.verButtonText}>Ver productos</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => eliminarPersona(persona._id)}
+                  style={styles.deleteButton}
+                >
+                  <Text style={styles.deleteButtonText}>Eliminar</Text>
+                </TouchableOpacity>           
+               </View>
             </View>
           ))
         ) : (
@@ -109,6 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0000ff',
     padding: 5,
     borderRadius: 5,
+    marginTop: 5,
     
 },
 verButtonText: {
@@ -119,5 +154,16 @@ verButtonText: {
 emptyText: {
     color: 'gray',
     fontSize: 17,
+},
+deleteButton: {
+  backgroundColor: '#ff0000',
+  padding: 5,
+  borderRadius: 5,
+  marginTop: 5,
+},
+deleteButtonText: {
+  color: '#fff',
+  fontWeight: 'bold',
+  textAlign: 'center',
 },
 });
