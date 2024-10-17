@@ -10,6 +10,7 @@ import Misproductos from './src/components/Misproductos';
 import Miscompras from './src/components/Miscompras';
 import Mapa from './src/components/Mapa';
 import 'react-native-gesture-handler';
+import Notificaciones from './src/components/Notificaciones';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -74,6 +75,13 @@ export default function App() {
         options={{ 
           title: 'Productos y Ofertas',
           tabBarIcon: ({ color, size, }) => (<Icon name="gift" color={color} size={size} />), headerShown: false }} />*/}
+       {/*<Tab.Screen
+        name="Notificaciones"
+        component={Notificaciones}
+        options={{
+          title: 'Notificaciones',
+          tabBarIcon: ({ color, size }) => (<Icon name="notifications" color={color} size={size}/>), headerShown: false }} />*/ } 
+    
 
       </Tab.Navigator>
 

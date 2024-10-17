@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React,  { useState, useRef } from 'react';
+import React,  { useState, useRef, useEffect } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -13,7 +13,22 @@ import Url from './Url';
 export default function Datos()  {
     const navigation = useNavigation(); 
     const [loading, setLoading] = useState(false);
-//url post
+    const [expoPushToken, setExpoPushToken] = useState(null);
+    useEffect(() => {
+      const fetchPushToken = async () => {
+          const token = await AsyncStorage.getItem('expoPushToken');
+        /*para obtener solo los de los [ ] por que el fomato que tenia era ExponentPushToken[jlfnawFRQ98p17NSixMihF]*/   if (token) {
+            // Extraer solo el contenido entre los corchetes
+            const formattedToken = token.match(/\[(.*?)\]/);
+            if (formattedToken) {
+                setExpoPushToken(formattedToken[1]); // Guarda solo lo que está dentro de los corchetes
+            }
+          //setExpoPushToken(token);
+          }/*FIN para obtener solo los de los [ ]*/
+      };
+      fetchPushToken();
+  }, []);
+
 const url_post = Url + '/crearPersona';
 
     const validationSchema = Yup.object().shape({
@@ -69,7 +84,7 @@ function takePicture() {}
         telefono: values.telefono,
         fotoCarnet: photoCarnet, 
         fotoSelfie: photoSelfie, 
-        idNotificacionPush: 'luna',
+        idNotificacionPush: expoPushToken,
     });
       const response = await axios.post(url_post, {
         nombreCompleto: values.nombreCompleto,
@@ -77,7 +92,7 @@ function takePicture() {}
       telefono: values.telefono,
       fotoCarnet: photoCarnet, 
       fotoSelfie: photoSelfie, 
-      idNotificacionPush: 'luna',
+      idNotificacionPush: expoPushToken,
 
       });
       navigation.navigate('FormularioIngreso');
@@ -87,7 +102,7 @@ function takePicture() {}
   console.error(error);
     }
     finally {
-      setLoading(false); // Finalizar carga
+      setLoading(false); 
   }
 }
 

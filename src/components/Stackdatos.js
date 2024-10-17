@@ -10,53 +10,62 @@ import Compra from './Compras';
 import Miscompras from './Miscompras';
 import  Datos from './Datos';
 import Productoofertas from './Productoofertas';
+import Notificaciones from './Notificaciones';
+import Header from './Header';
 
 const Stack = createStackNavigator();
 
 export default function Stackdatos() {
   return (
 
-      <Stack.Navigator initialRouteName="Datos">
+      <Stack.Navigator initialRouteName="Notificaciones">
         <Stack.Screen
           name="FormularioIngreso"
           component={Ingresos} // Usa el componente Ingresos
-          options={{ headerShown: false }}
+          options={{ header: () => <Header />}}
         />
         <Stack.Screen
         name="FormularioEgresos"
         component={Egresos} // Usa el componente Egresos
-        options={{ headerShown: false }}
+        options={{ header: () => <Header /> }}
         />
         <Stack.Screen
           name="Graficas"
           component={Graficas} // Usa el componente Grafica
-          options={{ headerShown: false }}
+          options={{header: () => <Header /> }}
         />
          <Stack.Screen
           name="Home"
           component={Home} // Usa el componente Grafica
-          options={{ title: 'Inicio' }}
+          options={{ header: () => <Header /> }}
         />
         <Stack.Screen
         name="Productoofertas"
         component={Productoofertas} // Usa el componente Productoofertas
-        options={{ headerShown: false }}
+        options={{header: () => <Header /> }}
         />
         <Stack.Screen
         name="Miscompras"
         component={Miscompras} // Usa el componente  Miscompras
-        options={{ headerShown: false }}
+        options={{ header: () => <Header /> }}
         />
         <Stack.Screen
         name="Compras"
         component={Compra} // Usa el componente Compra
-        options={{ headerShown: false }}
+        options={{ header: () => <Header /> }}
         />
         <Stack.Screen
         name="Datos"
         component={Datos} // Usa el componente Datos
-        options={{ headerShown: false }}
+        options={{ header: () => <Header /> }}
         />
+        <Stack.Screen
+        name="Notificaciones"
+        component={Notificaciones} // Usa el componente Notificaciones
+        options={{ header: () => <Header /> }}
+        />
+
+
         
       </Stack.Navigator>
   )
