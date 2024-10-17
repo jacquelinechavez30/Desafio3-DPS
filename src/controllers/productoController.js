@@ -1,6 +1,9 @@
+const { Expo } = require('expo-server-sdk');
 const Producto = require('../models/productoSchema');
 const Persona = require('../models/personaSchema');
-
+const expo = new Expo({
+  accessToken: process.env.EXPO_ACCESS_TOKEN,
+});
 // Crear un nuevo producto
     const crearProducto = async (req, res) => {
         const { nombreProducto, nombrePersona } = req.body; 
@@ -70,6 +73,7 @@ const listarProductoPorId = async (req, res) => {
 const actualizarProducto = async (req, res) => {
   const { id } = req.params;
   const { estado } = req.body; 
+  const { pushToken } = req.body;
   try {
     const productoActualizado = await Producto.findByIdAndUpdate(
       id,
@@ -79,8 +83,23 @@ const actualizarProducto = async (req, res) => {
 
     if (!productoActualizado) {
       return res.status(404).json({ message: 'Producto no encontrado' });
-    }
 
+    }
+   
+    if (Expo.isExpoPushToken(pushToken)) {
+      const message = {
+        to: pushToken,
+        title:'Producto estado',
+        sound: 'default',
+        body: `El estado de tu producto "${productoActualizado.nombreProducto}" ha sido actualizado a "${estado}".`,
+        data: { productoId: productoActualizado._id },
+      };
+
+      // Envía la notificación
+      await expo.sendPushNotificationsAsync([message]);
+    } else {
+      console.error(`El token de notificación ${pushToken} no es válido`);
+    }
     res.status(200).json({
       message: 'Producto actualizado exitosamente',
       producto: productoActualizado
