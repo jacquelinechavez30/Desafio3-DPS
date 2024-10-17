@@ -65,7 +65,7 @@ export default function Miscompras() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Mis Compras 
+            <Text style={styles.title}>Mis Compras
                { /*Icono de compra*/}
                 <Icon name="shopping-cart" size={30} color="black" />
             </Text>
