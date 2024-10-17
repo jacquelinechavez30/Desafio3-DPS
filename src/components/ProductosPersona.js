@@ -7,23 +7,30 @@ import Url from './Url';
 export default  ProductosPersona = ({ navigation }) => {
   const [productos, setProductos] = useState([]);
   const [nombrePersona, setNombrePersona] = useState('');
+  const [idNotificaciones, setIdNotificaciones] = useState('');  // Aquí se almacenará el id de notificaciones Push
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     obtenerNombrePersona();
     obtenerProductos();
+    obtenerIdNotificaciones();
   }, []);
 
   const obtenerNombrePersona = async () => {
     const nombre = await AsyncStorage.getItem('nombrePersona');
     setNombrePersona(nombre);
   };
+  const obtenerIdNotificaciones = async () => {
+    const idNotificaciones = await AsyncStorage.getItem('idNotificacionPush');
+    setIdNotificaciones(idNotificaciones);
+    console.log('ID de notificaciones:', idNotificaciones);
+  };
 
   const obtenerProductos = async () => {
     try {
       const nombre = await AsyncStorage.getItem('nombrePersona');
       if (nombre) {
-        const response = await axios.get(`${Url}/productos`, { params: { nombrePersona: nombre } });
+        const response = await axios.get(`${Url}/productos`, { params: { nombrePersona: nombre , pushToken:idNotificaciones,} });
         setProductos(response.data);
       }
     } catch (error) {
@@ -50,6 +57,7 @@ export default  ProductosPersona = ({ navigation }) => {
     try {
       await axios.put(`${Url}/editarproducto/${idProducto}`, {
         estado: 'Aprobado',
+        pushToken: idNotificaciones,
       });
       Alert.alert('Producto aprobado', 'El estado del producto ha sido actualizado a "Aprobado".');
       obtenerProductos(); 

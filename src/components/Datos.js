@@ -28,7 +28,9 @@ export default Datos = ({ navigation }) => {
 
   const verProductos = async (persona) => {
     try {
-      await AsyncStorage.setItem('nombrePersona', persona.nombreCompleto);  
+      await AsyncStorage.setItem('nombrePersona', persona.nombreCompleto);
+      //id notificaciones
+      await AsyncStorage.setItem('idNotificacionPush', persona.idNotificacionPush);  
       console.log('Nombre de la persona guardado en AsyncStorage:', persona.nombreCompleto); 
       navigation.navigate('ProductosPersona'); 
     } catch (error) {
@@ -50,6 +52,7 @@ export default Datos = ({ navigation }) => {
               <Text style={styles.Name}>Nombre:{persona.nombreCompleto}</Text>
               <Text style={styles.emptyText}>Telefono:{persona.telefono}</Text>
               <Text style={styles.emptyText}>Dirección:{persona.direccion}</Text>
+              <Text style={styles.emptyText}>Id Notificaciones:{persona. idNotificacionPush}</Text>
               
               <View style={styles.botonproductos}>
                 <TouchableOpacity
