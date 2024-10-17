@@ -17,14 +17,15 @@ export default function Datos()  {
     useEffect(() => {
       const fetchPushToken = async () => {
           const token = await AsyncStorage.getItem('expoPushToken');
-        /*para obtener solo los de los [ ] por que el fomato que tenia era ExponentPushToken[jlfnawFRQ98p17NSixMihF]*/   if (token) {
+        /*para obtener solo los de los [ ] por que el fomato que tenia era ExponentPushToken[jlfnawFRQ98p17NSixMihF]*/  
+        // if (token) {
             // Extraer solo el contenido entre los corchetes
-            const formattedToken = token.match(/\[(.*?)\]/);
-            if (formattedToken) {
-                setExpoPushToken(formattedToken[1]); // Guarda solo lo que está dentro de los corchetes
-            }
-          //setExpoPushToken(token);
-          }/*FIN para obtener solo los de los [ ]*/
+           // const formattedToken = token.match(/\[(.*?)\]/);
+           // if (formattedToken) {
+                //setExpoPushToken(formattedToken[1]); // Guarda solo lo que está dentro de los corchetes
+          //  }
+          setExpoPushToken(token);
+          //}/*FIN para obtener solo los de los [ ]*/
       };
       fetchPushToken();
   }, []);
