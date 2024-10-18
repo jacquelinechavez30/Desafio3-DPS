@@ -15,7 +15,7 @@ import * as Yup from "yup";
 import RNPickerSelect from "react-native-picker-select";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Icon from "react-native-vector-icons/FontAwesome/"
 
 
 // Validaciones
@@ -128,7 +128,7 @@ export default function Ingresos() {
                 { label: "Remesas", value: "Remesas" },
                 { label: "Ingresos Varios", value: "Ingresos Varios" },
               ]}
-              style={{ inputIOS: styles.RNPickerSelect, inputAndroid: styles.RNPickerSelect }}
+              style={pickerSelectStyles}
               value={values.tipoIngreso}
               placeholder={{
                 label: "Selecciona un tipo de ingreso",
@@ -149,9 +149,12 @@ export default function Ingresos() {
             />
             {touched.monto && errors.monto && <Text style={styles.error}>{errors.monto}</Text>}
 
-            <View style={styles.Button}>
+            <TouchableOpacity style={styles.Button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Agregar ingreso</Text>
+            </TouchableOpacity>
+              {/*<View style={styles.Button}>
               <Button title="Agregar Ingreso" onPress={handleSubmit} />
-            </View>
+              </View>*/}
           </View>
         )}
       </Formik>
@@ -162,15 +165,18 @@ export default function Ingresos() {
       {ingresos.length > 0 ? (
         <View style={styles.lista}>
           <Text style={{ color: '#198754', marginBottom: 8, }}>Toca un ingreso para editar</Text>
-          <Text style={{ fontWeight: 'bold' }}>Lista de los ingresos:</Text>
+          <Text style={{ fontWeight: 'bold' }}>Lista de ingresos:</Text>
           <FlatList
             data={ingresos}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
-              <TouchableOpacity onPress={() => editarIngreso(index)}>
-                <Text>➤ Tipo de Ingreso: {item.tipoIngreso}</Text>
-                <Text>Monto: ${item.monto}</Text>
+              <View style={styles.flatListItem}>
+                <TouchableOpacity onPress={() => editarIngreso(index)}>
+                <Text style={styles.flatListItemText}>➤ Tipo de Ingreso: {item.tipoIngreso}</Text>
+                <Text style={styles.flatListItemText}>Monto: ${item.monto}</Text>
               </TouchableOpacity>
+              </View> 
+              
             )}
           />
         </View>
@@ -252,30 +258,36 @@ export default function Ingresos() {
                       <Text style={styles.error}>{errors.monto}</Text>
                     )}
 
-                    <View style={styles.buttonModal}>
-                      <Button
-                        title="Guardar cambios"
-                        onPress={handleSubmit}
-                      />
-                    </View>
+                    <TouchableOpacity
+                    style={{backgroundColor:'green', alignContent: 'center', alignItems: 'center', padding: 10, borderRadius: 5, marginTop: 10}}
+                    onPress={handleSubmit}>
+                      <Text style={{color:'white'}}>GUARDAR CAMBIOS</Text>
+                    </TouchableOpacity>
+
                   </View>
                 )}
               </Formik>
             )}
+            
+            <TouchableOpacity
+            style={{backgroundColor:'#dc3545', alignContent: 'center', alignItems: 'center', padding: 10, borderRadius: 5, marginTop: 10}}
+            onPress={eliminarIngreso}>
+              <Text style={{color:'white'}}>ELIMINAR</Text>
+            </TouchableOpacity>
 
-            <View style={styles.buttonModal}>
-              <Button title="Eliminar ingreso" onPress={eliminarIngreso} />
-            </View>
-            <View style={styles.buttonModal}>
-              <Button title="Cancelar" onPress={() => setModalVisible(false)} />
-            </View>
+            <TouchableOpacity
+            style={{backgroundColor:'gray', alignContent: 'center', alignItems: 'center', padding: 10, borderRadius: 5, marginTop: 10}}
+            onPress={() => setModalVisible(false)}>
+              <Text style={{color:'white'}}>CANCELAR</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
       {/*boton para ir a Egresos  solo si el array Ingresos es diferente de null*/}
       {ingresos && ingresos.length > 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('FormularioEgresos')}>
-          <Text style={{ color: '#212529', marginBottom: 8, fontWeight: 'bold' }}>Ir a Egresos</Text>
+        <TouchableOpacity style={styles.botonMenu} onPress={() => navigation.navigate('FormularioEgresos')}>
+          <Text style={{ color: 'white', marginBottom: 8, fontWeight: 'bold', textAlign:'right' }}>
+            Ir a egresos <Icon name='arrow-right'></Icon></Text>
         </TouchableOpacity>
       )}
 
@@ -288,26 +300,39 @@ export default function Ingresos() {
   const styles = StyleSheet.create({
     Text: {
       margin: 10,
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: '#333',
     },
     Container: {
-      backgroundColor: '#f8f9fa',
-    },
-    RNPickerSelect: {
-      marginTop: 0,
-      marginBottom: 20,
-      marginLeft: 10,
-      marginRight: 10,
-      width:Dimensions.get('window').width * 0.94,
-      height: 40,
-      borderWidth: 1,
-      backgroundColor: '#fff',
+      flex: 1,
+      padding: 20,
+      backgroundColor: '#f5f5f5',
     },
     Button: {
-      padding: 10,
+      backgroundColor: '#002d70',
+      paddingVertical: 8,
+      marginHorizontal: 30,
+      borderRadius: 5,
       alignItems: 'center',
-    },
-    buttonModal: {
       marginTop: 10,
+      borderWidth: 1,
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    botonMenu: {
+      backgroundColor: '#002d70',
+      alignItems: 'center',
+      marginHorizontal: 5,
+      marginTop: 0,
+      borderRadius: 10,
+      borderWidth: 1,
+      paddingBottom: 0,
+      paddingTop: 5,
+      paddingHorizontal: 10,
     },
     error: {
       color: 'red',
@@ -324,17 +349,48 @@ export default function Ingresos() {
       borderWidth: 0.5,
       backgroundColor: '#fff',
     },
+    flatListItem: {
+      padding: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    flatListItemText: {
+      fontSize: 14,
+      color: '#333',
+    },
     separator: {
       height: 1,
-      backgroundColor: '#000',
-      marginVertical: 10,
-      marginLeft: 25,
-      marginRight: 25,
+      backgroundColor: '#ccc',
+      marginVertical: 20,
+      marginHorizontal: -10,
     },
     lista: {
       marginLeft: 30,
       marginRight: 10,
+      marginBottom: 0,
+      marginTop: 0,
+    },
+  });
+
+  const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+      height: 50,
+      borderColor: '#ccc',
+      borderWidth: 1,
+      borderRadius: 10,
+      paddingHorizontal: 10,
       marginBottom: 10,
-      marginTop: 10,
+      backgroundColor: '#fff',
+      fontSize: 16,
+    },
+    inputAndroid: {
+      height: 50,
+      borderColor: '#ccc',
+      borderWidth: 1,
+      borderRadius: 10,
+      paddingHorizontal: 10,
+      marginBottom: 10,
+      backgroundColor: '#fff',
+      fontSize: 16,
     },
   });

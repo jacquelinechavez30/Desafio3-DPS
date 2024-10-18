@@ -33,11 +33,14 @@ export default function Datos()  {
 const url_post = Url + '/crearPersona';
 
     const validationSchema = Yup.object().shape({
-        nombreCompleto: Yup.string().required('El nombre completo es obligatorio'),
-        direccion: Yup.string().required('La dirección es obligatoria'),
+        nombreCompleto: Yup.string().required('El nombre de usuario es obligatorio.')
+        .matches(/^\S*$/, 'El nombre de usuario no puede contener espacios.'),
+        direccion: Yup.string().required('La dirección es obligatoria.'),
         telefono: Yup.string()
-            .required('El teléfono es obligatorio')
+            .required('El teléfono es obligatorio.')
             .matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+        pin: Yup.string().required('El pin es obligatorio.')
+        .matches(/^[0-9]+$/, 'El pin solo puede contener números'),
     });
 
     //camara
@@ -94,17 +97,19 @@ function takePicture() {}
         nombreCompleto: values.nombreCompleto,
         direccion: values.direccion,
         telefono: values.telefono,
+        pin: values.pin,
         fotoCarnet: photoCarnet, 
         fotoSelfie: photoSelfie, 
         idNotificacionPush: expoPushToken,
     });
       const response = await axios.post(url_post, {
         nombreCompleto: values.nombreCompleto,
-      direccion: values.direccion,
-      telefono: values.telefono,
-      fotoCarnet: photoCarnet, 
-      fotoSelfie: photoSelfie, 
-      idNotificacionPush: expoPushToken,
+        direccion: values.direccion,
+        telefono: values.telefono,
+        pin: values.pin,
+        fotoCarnet: photoCarnet, 
+        fotoSelfie: photoSelfie, 
+        idNotificacionPush: expoPushToken,
 
       });
       navigation.navigate('FormularioIngreso');
@@ -153,6 +158,7 @@ function takePicture() {}
                     nombreCompleto: '',
                     direccion: '',
                     telefono: '',
+                    pin: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
@@ -161,7 +167,7 @@ function takePicture() {}
                     <>
                         <TextInput
                             style={styles.input}
-                            placeholder="Nombre completo"
+                            placeholder="Nombre de usuario"
                             onChangeText={handleChange('nombreCompleto')}
                             onBlur={handleBlur('nombreCompleto')}
                             value={values.nombreCompleto}
@@ -190,6 +196,17 @@ function takePicture() {}
                         />
                         {errors.telefono && touched.telefono && (
                             <Text style={styles.errorText}>{errors.telefono}</Text>
+                        )}
+                        
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Pin de cuenta"
+                            onChangeText={handleChange('pin')}
+                            onBlur={handleBlur('pin')}
+                            value={values.pin}
+                        />
+                        {errors.pin && touched.pin && (
+                            <Text style={styles.errorText}>{errors.pin}</Text>
                         )}
 
                         <TouchableOpacity 
@@ -257,6 +274,8 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         fontSize: 12,
+        marginTop: -10,
+        marginBottom: 10,
     },
     containerC: {
         flex: 1,

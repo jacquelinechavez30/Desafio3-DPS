@@ -74,35 +74,12 @@ export default function Graficas() {
     },
   ];
 
-  const styles = StyleSheet.create({
-    Text: {
-      margin: 10,
-      fontWeight: 'bold',
-    },
-    Container: {
-      backgroundColor: '#f8f9fa',
-    },
-    separator: {
-      height: 1,
-      backgroundColor: '#000',
-      marginVertical: 10,
-      marginLeft: 25,
-      marginRight: 25,
-    },
-    containerGrafica: {
-      backgroundColor: '#FFFF05',
-      alignItems: 'center',
-      margin: 5,
-      borderRadius: 10,
-      padding: 5,
-    },
-  });
-
   return (
-    <View>
+    <View style={styles.Container}>
       <Text style={styles.Text}>¡Analiza tus estadísticas!</Text>
-
-      <Text style={styles.Text}>Gráfica Comparativa de Ingresos y Egresos:</Text>
+      <View style={styles.separator} />
+      <View style={styles.chartContainer}>
+      <Text style={styles.chartText}>Gráfica Comparativa de tus Ingresos y Egresos:</Text>
       <PieChart
         data={dataPie}
         width={screenWidth}
@@ -118,20 +95,79 @@ export default function Graficas() {
         accessor="total"
         backgroundColor="transparent"
         paddingLeft="15"
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
       />
-
-      {/* Botón para ir a productos ofertados */}
-      <TouchableOpacity
-        style={styles.containerGrafica}
-        onPress={() => navigation.navigate('Productoofertas')}
-      >
-        <Text style={{ color: '#212529', marginBottom: 8, fontWeight: 'bold' }}>Productos Ofertados</Text>
-        <Icon name="shopping-cart" size={24} color="#000" />
+      </View>
+      <View style={styles.separator}/>
+      
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop:10}}>
+      <TouchableOpacity style={styles.botonMenu} onPress={() => navigation.navigate('FormularioEgresos')}>
+          <Text style={{ color: 'white', fontWeight:'bold'}}>
+            <Icon name='arrow-left'></Icon>  Volver</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.botonMenu} onPress={() => navigation.navigate('Productoofertas')}>
+        <Text style={{ color: 'white', fontWeight:'bold' }}>
+          <Icon name="shopping-cart" size={15} color="white" /> Productos ofertados  <Icon name='arrow-right'/></Text>
+      </TouchableOpacity>
+      </View>
+      
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  Text: {
+    fontSize: 23,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    color: '#333',
+    textAlign: 'center',
+  },
+  Container: {
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+    alignItems: 'center',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: 'black',
+    paddingHorizontal: 180,
+    marginBottom: 0,
+    marginTop: -20,
+  },
+  chartContainer: {
+    width: 'auto',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  botonMenu: {
+    backgroundColor: '#002d70',
+    alignItems: 'center',
+    marginHorizontal: 5,
+    marginTop: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingBottom: 6,
+    paddingTop: 5,
+    paddingHorizontal: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  chartText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+    textAlign: 'center',
+  },
+});

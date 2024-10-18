@@ -15,14 +15,15 @@ import * as Yup from "yup";
 import RNPickerSelect from "react-native-picker-select";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/FontAwesome/';
 
 // Validaciones
 const validationSchema = Yup.object().shape({
   tipoEgreso: Yup.string().required("Selecciona un tipo de egreso"),
   monto: Yup.number()
-    .typeError("El monto debe ser un número")
-    .required("Ingresa un monto ($)")
-    .positive("El monto no puede ser negativo"),
+    .typeError("El monto debe ser un número.")
+    .required("Ingresa un monto ($).")
+    .positive("El monto no puede ser negativo."),
 });
 
 export default function Egresos() {
@@ -119,7 +120,7 @@ export default function Egresos() {
                 { label: "Salud y Seguro", value: "Salud y Seguro" },
                 { label: "Egresos Varios", value: "Egresos Varios" },
               ]}
-              style={{ inputIOS: styles.RNPickerSelect, inputAndroid: styles.RNPickerSelect }}
+              style={pickerSelectStyles}
               value={values.tipoEgreso}
               placeholder={{
                 label: "Selecciona un tipo de egreso",
@@ -142,9 +143,9 @@ export default function Egresos() {
               <Text style={styles.error}>{errors.monto}</Text>
             )}
 
-            <View style={styles.Button}>
-              <Button title="Agregar Egreso" onPress={handleSubmit} />
-            </View>
+            <TouchableOpacity style={styles.Button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Agregar egreso</Text>
+            </TouchableOpacity>
           </View>
         )}
       </Formik>
@@ -153,16 +154,18 @@ export default function Egresos() {
 
       {egresos.length > 0 ? (
         <View style={styles.lista}>
-          <Text style={{ color: '#dc3545', marginBottom: 8, }}>Toca un egreso para editar</Text> 
-          <Text style={{ fontWeight: 'bold' }}>Lista de los egresos:</Text>
+          <Text style={{ color: '#198754', marginBottom: 8, }}>Toca un egreso para editar</Text> 
+          <Text style={{ fontWeight: 'bold' }}>Lista de egresos:</Text>
           <FlatList
             data={egresos}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
-              <TouchableOpacity onPress={() => editarEgreso(index)}>
-                <Text>➤ Tipo de Egreso: {item.tipoEgreso}</Text>
-                <Text>Monto: ${item.monto}</Text>
-              </TouchableOpacity>
+              <View style={styles.flatListItem}>
+                <TouchableOpacity onPress={() => editarEgreso(index)}>
+                  <Text style={styles.flatListItemText}>➤ Tipo de Egreso: {item.tipoEgreso}</Text>
+                  <Text style={styles.flatListItemText}>Monto: ${item.monto}</Text>
+                </TouchableOpacity>
+              </View>
             )}
           />
         </View>
@@ -229,7 +232,7 @@ export default function Egresos() {
                         label: "Selecciona un tipo de egreso",
                         value: null,
                       }}
-                      style={{ inputIOS: styles.RNPickerSelect, inputAndroid: styles.RNPickerSelect }}
+                      style={pickerSelectStyles}
                     />
                     {touched.tipoEgreso && errors.tipoEgreso && (
                       <Text style={styles.error}>{errors.tipoEgreso}</Text>
@@ -247,81 +250,140 @@ export default function Egresos() {
                       <Text style={styles.error}>{errors.monto}</Text>
                     )}
 
-                    <View style={styles.buttonModal}>
-                      <Button title="Guardar cambios" onPress={handleSubmit} />
-                    </View>
-                    <View style={styles.buttonModal}>
-                      <Button
-                        title="Eliminar Egreso"
-                        color="#dc3545"
-                        onPress={eliminarEgreso}
-                      />
-                    </View>
-                    <View style={styles.buttonModal}>
-                      <Button
-                        title="Cancelar"
-                        onPress={() => setModalVisible(false)}
-                      />
-                    </View>
+                    <TouchableOpacity
+                    style={{backgroundColor:'green', alignContent: 'center', alignItems: 'center', padding: 10, borderRadius: 5, marginTop: 10}}
+                    onPress={handleSubmit}>
+                      <Text style={{color:'white'}}>GUARDAR CAMBIOS</Text>
+                    </TouchableOpacity>
+
                   </View>
                 )}
               </Formik>
             )}
+
+            <TouchableOpacity
+            style={{backgroundColor:'#dc3545', alignContent: 'center', alignItems: 'center', padding: 10, borderRadius: 5, marginTop: 10}}
+            onPress={eliminarEgreso}>
+              <Text style={{color:'white'}}>ELIMINAR</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+            style={{backgroundColor:'gray', alignContent: 'center', alignItems: 'center', padding: 10, borderRadius: 5, marginTop: 10}}
+            onPress={() => setModalVisible(false)}>
+              <Text style={{color:'white'}}>CANCELAR</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
       {/*boton para ir a graficas  solo si el array egresos es diferente de null*/}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop:-1}}>
+      <TouchableOpacity style={styles.botonMenu} onPress={() => navigation.navigate('FormularioIngreso')}>
+          <Text style={{ color: 'white', fontWeight: 'bold',}}>
+            <Icon name='arrow-left'></Icon> Volver a ingresos</Text>
+      </TouchableOpacity>
       {egresos && egresos.length > 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Graficas')}>
-          <Text style={{ color: '#212529', marginBottom: 8, fontWeight: 'bold' }}>Ver gráficas</Text>
+        <TouchableOpacity style={styles.botonMenu} onPress={() => navigation.navigate('Graficas')}>
+          <Text style={{ color: 'white', fontWeight: 'bold', }}>
+            Ver gráficas <Icon name='arrow-right'></Icon></Text>
         </TouchableOpacity>
         
       )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   Container: {
+    flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
-    flex: 1,
   },
   Text: {
+    margin: 10,
     fontSize: 16,
-    marginBottom: 8,
+    fontWeight: 'bold',
+    color: '#333',
   },
   TextInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 10,
-  },
-  RNPickerSelect: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 10,
+    marginTop: 0,
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    padding: 10,
+    borderWidth: 0.5,
+    backgroundColor: '#fff',
   },
   Button: {
-    marginVertical: 10,
+    backgroundColor: '#002d70',
+    paddingVertical: 8,
+    marginHorizontal: 30,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
   },
-  lista: {
-    marginTop: 20,
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  botonMenu: {
+    backgroundColor: '#002d70',
+    alignItems: 'center',
+    marginHorizontal: 5,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingBottom: 6,
+    paddingTop: 5,
+    paddingHorizontal: 20,
+  },
+  flatListItem: {
+    padding: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  flatListItemText: {
+    fontSize: 14,
+    color: '#333',
   },
   separator: {
-    marginVertical: 10,
     height: 1,
-    width: "100%",
-    backgroundColor: "#CED0CE",
+    backgroundColor: '#ccc',
+    marginVertical: 20,
+    marginHorizontal: -10,
+  },
+  lista: {
+    marginLeft: 30,
+    marginRight: 10,
+    marginBottom: 0,
+    marginTop: 0,
   },
   error: {
-    fontSize: 12,
-    color: "red",
+    color: 'red',
+    marginTop: 0,
+    marginLeft: 10,
+    marginBottom: 5,
   },
-  buttonModal: {
-    marginVertical: 5,
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    backgroundColor: '#fff',
+    fontSize: 16,
+  },
+  inputAndroid: {
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    backgroundColor: '#fff',
+    fontSize: 16,
   },
 });

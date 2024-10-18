@@ -64,13 +64,13 @@ export default function Stackdatos() {
 
         name="Notificaciones"
         component={Notificaciones} // Usa el componente Notificaciones
-        options={{ header: () => <Header /> }}
+        options={{ header: () => null}}
         />
 
-<Stack.Screen
+        <Stack.Screen
         name="Mapa"
         component={Mapa}
-        options={{ headerShown: false }}
+        options={{ header: () => <Header /> }}
         />
 
         

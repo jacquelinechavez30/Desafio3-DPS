@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Platform, View, Text, StyleSheet } from 'react-native';
+import { Button, Platform, View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -50,9 +50,8 @@ async function schedulePushNotification() {
         },
         trigger: { seconds: 2 },
     });
-    //navegar a Datos
-    navigation.navigate('Datos');
-
+    
+    navigation.navigate('FormularioIngreso');
 }
 
 async function registerForPushNotificationsAsync() {
@@ -92,22 +91,22 @@ async function registerForPushNotificationsAsync() {
 
 
     return (
+    <ImageBackground
+    source={require("../img/business-city.jpg")}
+    style={styles.background}>
         <View style={styles.container}>
             <Text style={styles.text}>Bienvenido a CreditMate</Text>
-            <Icon name="user-circle" size={75} color="#219999" 
-                          marginLeft={20}/>
-            <Text>Regístrate para continuar</Text>
-            <Text>Tu token de Expo Push: {expoPushToken}</Text>
-            <View style={styles.button}>
-            <Button
-                title="Iniciar Registro"
-
-                onPress={async () => {
+            <Icon name="university" size={75} color="#002d70"/>
+            <Text style={{margin:15, textAlign:'center', fontSize:20, color:'white', fontWeight:'450'}}>
+                Controla tus finanzas, toma decisiones inteligentes y alcanza tus metas financieras con facilidad</Text>
+            {/*<Text>Tu token de Expo Push: {expoPushToken}</Text>*/}
+            <TouchableOpacity style={styles.button} on onPress={
+                async () => {
                     await schedulePushNotification();
-                }}
-
-            />
-            </View>
+            }}>
+                <Text style={styles.buttonText}>Comenzar <Icon name='hand-pointer-o'/>
+                </Text>
+            </TouchableOpacity>
             {/*notification && (
                 <View style={{ marginTop: 20 }}>
                     <Text>Última notificación recibida:</Text>
@@ -116,25 +115,42 @@ async function registerForPushNotificationsAsync() {
                 </View>
             )*/}
         </View>
+    </ImageBackground>
     );
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
+        padding: 20,
+        backgroundColor: '#f5f5f5',
+        alignContent: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    background: {
+        flex: 1,
+        resizeMode: "cover",
     },
     button: {
-        marginTop: 20,
+        marginTop: 2,
+        paddingVertical: 8,
+        paddingHorizontal: 50,
+        backgroundColor: '#002d70',
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     text: {
-        fontSize: 20,
-        //negrita
+        fontSize: 25,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 15,
         marginTop: 20,
+        textAlign: 'center',
+        color: '#fff',
     },
-
- 
 });
