@@ -39,23 +39,12 @@ const url_post = Url + '/crearPersona';
         telefono: Yup.string()
             .required('El teléfono es obligatorio.')
             .matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
-        pin: Yup.string().required('El pin es obligatorio.')
-        .matches(/^[0-9]+$/, 'El pin solo puede contener números'),
     });
 
-    //camara
-    const [facing, setFacing] = useState('back');
-  const [isCameraVisible, setIsCameraVisible] = useState(false);
-  const [permission, requestPermission] = useCameraPermissions();
-  //para guardar la foto 
   const [photoCarnet, setPhotoCartnet] = useState('carnet');
   const [photoSelfie, setPhotoSelfie] = useState('selfie');
-  const cameraRef = useRef(null);
-  if (!permission) {
-    return <View />;
-  }
 
-  if (!permission.granted) {
+  {/*if (!permission.granted) {
     return (
       Alert.alert(
         'Habilitar cámaras',
@@ -73,31 +62,20 @@ const url_post = Url + '/crearPersona';
         ],
         {cancelable: false},
       ));
-  }
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
-  function handleOpenCamera() {
-    setIsCameraVisible(true);
-  }
-
-  function handleCloseCamera() {
-    setIsCameraVisible(false);
-  }
-//Para tomar la foto
-function takePicture() {}
+  }*/}
 
   async function handleSubmit(values) {
     setLoading(true);
     //conectando ala api 
     try {
-     
       await AsyncStorage.setItem('nombreCompleto', values.nombreCompleto);
+      await AsyncStorage.setItem('direccion', values.direccion);
+      await AsyncStorage.setItem('telefono', values.telefono);
+      console.log('Nombre completo guardado:', values);
       console.log("Valores a enviar:", {
         nombreCompleto: values.nombreCompleto,
         direccion: values.direccion,
         telefono: values.telefono,
-        pin: values.pin,
         fotoCarnet: photoCarnet, 
         fotoSelfie: photoSelfie, 
         idNotificacionPush: expoPushToken,
@@ -106,13 +84,12 @@ function takePicture() {}
         nombreCompleto: values.nombreCompleto,
         direccion: values.direccion,
         telefono: values.telefono,
-        pin: values.pin,
         fotoCarnet: photoCarnet, 
         fotoSelfie: photoSelfie, 
         idNotificacionPush: expoPushToken,
 
       });
-      navigation.navigate('FormularioIngreso');
+      navigation.navigate('Camara');
     } catch (error) {
       const errorMessage = error?.response?.data?.message || 'Problemas al realizar el registro intenta mas tarde';
   Alert.alert('¡ERROR!', errorMessage);
@@ -121,35 +98,12 @@ function takePicture() {}
     finally {
       setLoading(false); 
   }
-}
+};
 
     return (
         <View  style={styles.Container}>
             <View style={styles.containerC}>
-      {isCameraVisible ? (
-        <CameraView style={styles.cameraC} facing={facing}>
-          <View style={styles.buttonContainerC}>
-          <TouchableOpacity style={styles.buttonC} onPress={toggleCameraFacing}>
-              <Text style={styles.text}><Icon name="rotate-left" size={24} color="#fff" /></Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonC} onPress={takePicture}>
-              <Text style={styles.text}><Icon name="camera-retro" size={24} color="#fff" /></Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonC} onPress={handleCloseCamera}>
-              <Text style={styles.textC}><Icon name="close" size={24} color="#fff" /></Text>
-            </TouchableOpacity>
-          </View>
-        </CameraView>
-      ) : (
-
-        <View>
-        
-                        {loading ? ( 
-                            <View style={styles.loadingContainer}>
-                                <ActivityIndicator size="large" color="#2196F3" />
-                                <Text style={styles.loadingText}>Cargando...</Text>
-                            </View>
-                        ) : (
+      
                           <View ><Text style={styles.Title}><Icon name="user-circle" size={30} color="#2196" 
                           marginLeft={20}/> Ingresa tus datos
                           </Text>
@@ -158,7 +112,6 @@ function takePicture() {}
                     nombreCompleto: '',
                     direccion: '',
                     telefono: '',
-                    pin: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
@@ -197,31 +150,6 @@ function takePicture() {}
                         {errors.telefono && touched.telefono && (
                             <Text style={styles.errorText}>{errors.telefono}</Text>
                         )}
-                        
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Pin de cuenta"
-                            onChangeText={handleChange('pin')}
-                            onBlur={handleBlur('pin')}
-                            value={values.pin}
-                        />
-                        {errors.pin && touched.pin && (
-                            <Text style={styles.errorText}>{errors.pin}</Text>
-                        )}
-
-                        <TouchableOpacity 
-                            style={styles.button} 
-                            onPress={handleOpenCamera} 
-                        >
-                            <Text style={styles.buttonText}>Tomar Fotografía de Carnet</Text>
-                        </TouchableOpacity>
-                      
-                        <TouchableOpacity 
-                            style={styles.button} 
-                            onPress={handleOpenCamera} 
-                        >
-                            <Text style={styles.buttonText}>Tomar Fotografía Selfie</Text>
-                        </TouchableOpacity>
 
                         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                             <Text style={styles.buttonText}>Enviar</Text>
@@ -231,12 +159,9 @@ function takePicture() {}
                 )}
             </Formik>
             </View>
-               )}
+               
                
         </View> 
-      )}
-    </View>
-
         </View>
     );
 

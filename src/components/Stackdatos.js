@@ -13,6 +13,9 @@ import Mapa from './Mapa';
 import Productoofertas from './Productoofertas';
 import Notificaciones from './Notificaciones';
 import Header from './Header';
+import Persona from './Persona';
+import Camara from './Camara';
+import Camara2 from './Camara2';
 
 const Stack = createStackNavigator();
 
@@ -73,7 +76,23 @@ export default function Stackdatos() {
         options={{ header: () => <Header /> }}
         />
 
+        <Stack.Screen
+        name="Persona"
+        component={Persona}
+        options={{ header: () => <Header /> }}
+        />
+
+        <Stack.Screen
+        name="Camara"
+        component={Camara}
+        options={{ header: () => <Header /> }}
+        />
         
+        <Stack.Screen
+        name="Camara2"
+        component={Camara2}
+        options={{ header: () => <Header /> }}
+        />
       </Stack.Navigator>
   )
 }

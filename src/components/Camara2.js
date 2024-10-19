@@ -11,7 +11,7 @@ export default function App() {
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [facing, setFacing] = useState('back');
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
   const [photo, setPhoto] = useState();
 
@@ -49,14 +49,14 @@ export default function App() {
   if(photo) {
     let sharePic = () => {
       Sharing.shareAsync(photo.uri).then( () => {
-        setPhoto(undefined);
+        setPhoto(undefined); //When the user shares the photo, the photo will be removed from the screen
       })
     };
 
     let savePhoto = () => {
         MediaLibrary.saveToLibraryAsync(photo.uri).then( () => {
           Alert.alert("Guardada exitosamente", "Tu foto ha sido guardada en tu galería");
-          navigation.navigate('Camara2');
+          navigation.navigate('Compras');
         });
     };
 
@@ -71,7 +71,7 @@ export default function App() {
 
   return (
     <CameraView style={styles.container} facing={facing} ref={cameraRef}>
-      <Text style={{color:'white', fontWeight:'bold'}}>Coloca tu carnet</Text>
+      <Text style={{color:'white', fontWeight:'bold'}}>Verifica que eres tú con una selfie</Text>
       <View style={styles.buttonContainer}>
         <Icon style={styles.buttonTake} name="camera" onPress={takePic}>
           </Icon>
