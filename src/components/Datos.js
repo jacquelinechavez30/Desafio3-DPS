@@ -14,6 +14,11 @@ export default function Datos()  {
     const navigation = useNavigation(); 
     const [loading, setLoading] = useState(false);
     const [expoPushToken, setExpoPushToken] = useState(null);
+    //const [photoCarnet, setPhotoCartnet] = useState('carnet');
+    //const [photoSelfie, setPhotoSelfie] = useState('selfie');
+    const [selfie, setSelfie] = useState(null);
+    const [photo, setPhoto] = useState(null);
+  
     useEffect(() => {
       const fetchPushToken = async () => {
           const token = await AsyncStorage.getItem('expoPushToken');
@@ -30,6 +35,43 @@ export default function Datos()  {
       fetchPushToken();
   }, []);
 
+  
+
+
+  useEffect(() => {
+    const loadPhotoFromAsyncStorage = async () => {
+      try {
+        const savedPhoto = await AsyncStorage.getItem('savedPhoto');
+        if (savedPhoto) {
+          setPhoto(savedPhoto);
+        }
+      } catch (error) {
+        console.log('Error recuperando la foto de AsyncStorage:', error);
+      }
+    };
+
+    loadPhotoFromAsyncStorage();
+  }, []);
+
+  
+
+  useEffect(() => {
+    const fetchSelfie = async () => {
+      try {
+        const storedSelfie = await AsyncStorage.getItem('selfie');
+        if (storedSelfie) {
+          setSelfie(`data:image/jpg;base64,${storedSelfie}`); // Convierte a formato base64
+        } else {
+          Alert.alert('No hay selfie guardada', 'No se ha encontrado una selfie en AsyncStorage.');
+        }
+      } catch (error) {
+        console.error('Error al recuperar la selfie:', error);
+      }
+    };
+
+    fetchSelfie();
+  }, []);
+
 const url_post = Url + '/crearPersona';
 
     const validationSchema = Yup.object().shape({
@@ -41,8 +83,6 @@ const url_post = Url + '/crearPersona';
             .matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
     });
 
-  const [photoCarnet, setPhotoCartnet] = useState('carnet');
-  const [photoSelfie, setPhotoSelfie] = useState('selfie');
 
   {/*if (!permission.granted) {
     return (
@@ -76,24 +116,38 @@ const url_post = Url + '/crearPersona';
         nombreCompleto: values.nombreCompleto,
         direccion: values.direccion,
         telefono: values.telefono,
-        fotoCarnet: photoCarnet, 
-        fotoSelfie: photoSelfie, 
+        fotoCarnet: /*photo*/ 'Foto1',
+        fotoSelfie: /*selfie*/'Foto2', 
         idNotificacionPush: expoPushToken,
     });
       const response = await axios.post(url_post, {
         nombreCompleto: values.nombreCompleto,
         direccion: values.direccion,
         telefono: values.telefono,
-        fotoCarnet: photoCarnet, 
-        fotoSelfie: photoSelfie, 
+        fotoCarnet: /*photo*/'foto1',
+        fotoSelfie: /*selfie*/'Foto2',  
         idNotificacionPush: expoPushToken,
 
       });
-      navigation.navigate('Camara');
+      navigation.navigate('Compras');
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
       const errorMessage = error?.response?.data?.message || 'Problemas al realizar el registro intenta mas tarde';
   Alert.alert('¡ERROR!', errorMessage);
-  console.error(error);
+  console.error(error); 
+        } else if (error.request) {
+            
+            Alert.alert('¡ERROR!', 'Revisa tu conexión a Internet.');
+            console.log('No se recibió respuesta:', error.request);
+        } else {
+            
+            Alert.alert('¡ERROR!', 'Ocurrió un error en el envio.');
+        }
+    } else {
+        
+        Alert.alert('¡ERROR!', 'Ocurrió un error inesperado.');
+    }
     }
     finally {
       setLoading(false); 

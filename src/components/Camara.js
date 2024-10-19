@@ -5,7 +5,7 @@ import * as MediaLibrary from 'expo-media-library';
 import React, { useState, useEffect, useRef } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
   const cameraRef = useRef()
   const [hasCameraPermission, setHasCameraPermission] = useState();
@@ -35,16 +35,37 @@ export default function App() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
 
-  let takePic = async () => {
-    let options = {
-      quality: 1,
-      base64: true,
-      exif:false
-    };
+  const savePhotoToAsyncStorage = async (base64) => {
+    try {
+      await AsyncStorage.setItem('fotoCarnet', base64);
+      Alert.alert('Foto de carnet guardada', 'Tu foto de carnet ha sido guardada en AsyncStorage');
+    } catch (error) {
+      console.log('Error guardando la foto de carnet en AsyncStorage:', error);
+    }
+  };
 
-    let newPhoto = await cameraRef.current.takePictureAsync(options);
-    setPhoto(newPhoto);
-  }
+  const takePic = async () => {
+    try {
+      if (cameraRef.current) {
+        const options = {
+          quality: 0.3, 
+          base64: true,
+          exif: false,
+        };
+
+        const newPhoto = await cameraRef.current.takePictureAsync(options);
+        setPhoto(newPhoto);
+
+        if (newPhoto.base64) {
+          await savePhotoToAsyncStorage(newPhoto.base64); 
+        } else {
+          throw new Error('Error al capturar la imagen. No se generó base64.');
+        }
+      }
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo tomar la foto: ' + error.message);
+    }
+  };
 
   if(photo) {
     let sharePic = () => {
